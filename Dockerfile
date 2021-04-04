@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 EXPOSE 22
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt update \
- && apt install -y curl wget socat git
+ && apt install -y curl wget socat git python3 python3-yaml
 RUN adduser --home /ops --gecos "" --disabled-password --shell /bin/bash --uid 10042 ops
 
 RUN wget https://get.helm.sh/helm-v3.5.3-linux-amd64.tar.gz \
