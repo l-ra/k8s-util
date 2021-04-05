@@ -17,6 +17,8 @@ RUN wget https://get.helm.sh/helm-v3.5.3-linux-amd64.tar.gz \
   && chmod a+x /usr/bin/k9s \
   && chmod a+x /usr/bin/helm 
 
+ADD pack-publish.sh update-version.sh update-version.py /
+
 #USER ops
 #WORKDIR /ops
 CMD ["/bin/bash"]
