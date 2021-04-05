@@ -70,7 +70,6 @@ helmRepoPwd = os.environ["HELM_REPO_PWD"]
 # load repo index
 repoIndex = loadRepoIndex(helmRepoUrl, helmRepoUser, helmRepoPwd)
 maxChartVer = getHighestVersionsFormRepo(repoIndex)
-esigner360Ver = maxChartVer["esigner360"]["chart"]["version"]
 
 chart = loadChart()
 updated = False
