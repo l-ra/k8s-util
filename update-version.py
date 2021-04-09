@@ -73,20 +73,26 @@ maxChartVer = getHighestVersionsFormRepo(repoIndex)
 
 chart = loadChart()
 updated = False
+updatedModules = []
+updatedModulesDetail = []
 
 for idx, dep in enumerate(chart["dependencies"]):
     depName=dep["name"]
     depVer=dep["version"]
     maxDepVer = maxChartVer[depName]["chart"]["version"]
     if semVer2Number(depVer) < semVer2Number(maxDepVer):
-        print(f"upgrading dependency {depName} {depVer} -> {maxDepVer}")
+        updatedModules.append(depName)
+        updatedModulesDetail.append(f"upgrading dependency {depName} {depVer} -> {maxDepVer}")
+        #print(f"upgrading dependency {depName} {depVer} -> {maxDepVer}")
         chart["dependencies"][idx]["version"] = maxDepVer
         updated = True
 
 if updated:
     oldChartVer = chart["version"]
     newChartVer = incSemVer(SEMVER_PATCH, chart["version"])
-    print(f"updating chart version {oldChartVer} -> {newChartVer}")
+    updatedModulesStr = ",".join(updatedModules)
+    updatedModulesDetailStr = "\n".join(updatedModulesDetail)
+    print(f"updating chart version {oldChartVer} -> {newChartVer} (updated modules: {updatedModulesStr})\n{updatedModulesDetailStr}")
     chart["version"] = newChartVer
 
 with open("Chart.yaml","w") as f:
