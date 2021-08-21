@@ -1,0 +1,28 @@
+stages:
+  - build-image
+
+build-image:
+  stage: build-image
+  only:
+    - master
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  variables:
+    CI_REGISTRY_IMAGE: k8s-util
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-build-image
+    paths:
+      - .kaniko-cache/
+  script:
+    - mkdir -p .kaniko-cache
+    - mkdir -p /kaniko/.docker
+    - echo $DOCKER_AUTH_CONFIG >  /kaniko/.docker/config.json
+    - >
+      /kaniko/executor 
+      --build-arg CI_PROXY_REGISTRY=${CI_PROXY_REGISTRY}/ 
+      --skip-tls-verify 
+      --cache --cache-dir .kaniko-cache 
+      --context docker --dockerfile Dockerfile 
+      --destination $CI_REGISTRY/$CI_REGISTRY_REPO/$CI_REGISTRY_IMAGE:git-${CI_COMMIT_SHORT_SHA}
+
